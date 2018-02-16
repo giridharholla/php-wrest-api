@@ -26,6 +26,7 @@ Can find postman rest client <a href="https://www.getpostman.com/postman" target
 * If your local web server is running on other port eg. 8080, url is http://localhost:8080/php-wrest-api/vehicles ...
 * If your local web server does not support mod_rewrite, use this pattern http://localhost:8080/php-wrest-api/index.php/vehicles ...
 
+<strong>Note:</strong> Please change the value of `UNIT_TEST_BASE_URL` in tests/test-config.php file to localhost base url as mentioned above before running PHPUnite test suite.
 
 ### Endpoint 1
 
