@@ -5,7 +5,14 @@ This is a wrapper REST api developed in php. The api provides customized end poi
 This application uses the latest Slim Framework v3 with the PHP-View template renderer and Guzzle as http client. It also uses the Monolog logger.
 
 
-## Installing the Application
+## Installation & Setup
+
+### Prerequisites
+
+* Webserver apache2 / nginx etc.. installed and running
+* PHP 5.5 or heigher installed and running
+
+### Installation
 
 * Download or Clone the repository from http://github.com/giridharholla/php-wrest-api
 * Extract the .zip file into webroot folder of your local webserver, if you download the .zip file.
