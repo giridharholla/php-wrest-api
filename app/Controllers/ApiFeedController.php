@@ -103,53 +103,8 @@
 					//check if api request is for crash rating as well
 					if($withRating == true)
 					{
-						//check if response has results
-						if($data[API_RESPONSE_KEY_COUNT] > 0 && count($data[API_RESPONSE_KEY_RESULTS]) > 0)
-						{
-							$vehicles = $data[API_RESPONSE_KEY_RESULTS];
-							$count = count($vehicles);
+						$data = $this->getCrashRatingData($client, $data);
 
-							//prepare NHTSA request and get data for each result
-							for($i=0; $i < $count; $i++)
-							{
-								$item = $vehicles[$i];
-								if(isset($item[API_REQUEST_PARAM_VEHICLE_ID]) && !empty($item[API_REQUEST_PARAM_VEHICLE_ID]) )
-								{
-									//prepare NHTSA request if item has valid VehilceID
-									$uri = $this->getApiRequestUri(
-										array(API_REQUEST_PARAM_VEHICLE_ID => $item[API_REQUEST_PARAM_VEHICLE_ID])
-										);
-									
-									//send request to get rating info
-									$apiResponse = $client->get($uri);
-									$this->container->logger->info("Rating URI ".$uri);
-									$json =  $apiResponse->json();
-
-									//check if json data has results
-									if(!empty($json) && isset($json[API_RESPONSE_KEY_RESULTS]))
-									{
-										$results = $json[API_RESPONSE_KEY_RESULTS];
-										if(!empty($results) && count($results) > 0)
-										{
-											$result = $results[0];
-
-											//check if result has rating info
-											if(isset($result[API_RESPONSE_KEY_CRASH_RATING_AVG]))
-											{
-												//update the vehicle info with crash rating obtained from result
-												$item[API_RESPONSE_KEY_CRASH_RATING]= $result[API_RESPONSE_KEY_CRASH_RATING_AVG];
-											}
-										}//end if crash test results available
-
-										$vehicles[$i] = $item;								
-									}//end if we get crash rating data
-
-								}//end if valid vehicle id 
-
-							}
-
-							$data[API_RESPONSE_KEY_RESULTS] = $vehicles;
-						}
 					}//end if rating selected
 
 					$this->container->logger->info("json data from external api ".json_encode($json));
@@ -191,7 +146,7 @@
 			$data = $this->getEmptyResponse();
 
 			//extract paramter values from request
-			$modelYear = $request->getParam(API_REQUEST_PARAM_MODEL_YEAR);
+			$modelYear = $request->getParam('modelYear');
 			$manufacturer = $request->getParam('manufacturer');
 			$vehicleModel = $request->getParam(API_REQUEST_PARAM_MODEL);
 
@@ -246,13 +201,83 @@
 	   }//end of handlePostRequest()
 
 		/**
+		  * Function to fetch Crash Rating information
+		  *
+		  * This function constructs external api request for fetching crash rating info. Function receives 
+		  * crash rating info for each of the vehicle listed in the input array and populates the CrashRating field
+		  * in each vehicle info object.
+		  * 
+		  *
+		  * @param Array $data, contains json array of vehicle info 
+		  * @param Client $client, GuzzleHttp client object 
+		  *
+		  * @return Array $data
+		  */
+		function getCrashRatingData($client, $data)
+		{
+			//check if response has results
+			if($data[API_RESPONSE_KEY_COUNT] > 0 && count($data[API_RESPONSE_KEY_RESULTS]) > 0)
+			{
+				$vehicles = $data[API_RESPONSE_KEY_RESULTS];
+				$count = count($vehicles);
+				//$client = new GuzzleHttp\Client();
+
+				//prepare NHTSA request and get data for each result
+				for($i=0; $i < $count; $i++)
+				{
+					$item = $vehicles[$i];
+					// do not send API request if ID is 0 or null
+					if(isset($item[API_REQUEST_PARAM_VEHICLE_ID]) && !empty($item[API_REQUEST_PARAM_VEHICLE_ID]) )
+					{
+						//prepare NHTSA request if item has valid VehilceID
+						$uri = $this->getApiRequestUri(
+							array(API_REQUEST_PARAM_VEHICLE_ID => $item[API_REQUEST_PARAM_VEHICLE_ID])
+							);
+						
+						//send request to get rating info
+						$apiResponse = $client->get($uri);
+						$this->container->logger->info("Rating URI ".$uri);
+						$json =  $apiResponse->json();
+
+						//check if json data has results
+						if(!empty($json) && isset($json[API_RESPONSE_KEY_RESULTS]) && count($json[API_RESPONSE_KEY_RESULTS]) > 0 )
+						{
+							$results = $json[API_RESPONSE_KEY_RESULTS];
+
+							$result = $results[0];
+
+							//check if result has rating info
+							if(isset($result[API_RESPONSE_KEY_CRASH_RATING_AVG]))
+							{
+								//update the vehicle info with crash rating obtained from result
+								$item[API_RESPONSE_KEY_CRASH_RATING]= $result[API_RESPONSE_KEY_CRASH_RATING_AVG];
+							}
+							
+
+							$vehicles[$i] = $item;								
+						}//end if we get crash rating data
+
+					}//end if valid vehicle id is not 0
+
+				}//end of loop 
+				
+				//update data with the CrashRating info 
+				$data[API_RESPONSE_KEY_RESULTS] = $vehicles;
+
+			}//end if data has elements
+
+			return $data;
+
+		}//end of getCrashRatingData
+
+		/**
 		  * Function to construct uri.
 		  *
 		  * This function constructs external api request based on array of parameters given. encoded url
 		  * will be constructed after validating each parameter.
 		  * 
 		  *
-		  * @param Array $params, contains ke-value paris of parameters submitted from client 
+		  * @param Array $params, contains ke-value pairs of parameters submitted from client 
 		  *
 		  * @return string $uri
 		  */

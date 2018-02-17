@@ -18,7 +18,7 @@ class RequirementTwoTest extends PHPUnit_Framework_TestCase
 			UNIT_TEST_BASE_URL,
 			[
 				'json' => [
-					'modelyear'    => '2015',
+					'modelYear'    => '2015',
 					'manufacturer'     => 'Audi',
 					'model'    => 'A3'
 				]
@@ -40,7 +40,7 @@ class RequirementTwoTest extends PHPUnit_Framework_TestCase
 			UNIT_TEST_BASE_URL,
 			[
 				'json' => [
-					'modelyear'    => '2015',
+					'modelYear'    => '2015',
 					'manufacturer'     => 'Ford',
 					'model'    => 'Fusion'
 				]
@@ -61,7 +61,7 @@ class RequirementTwoTest extends PHPUnit_Framework_TestCase
 			UNIT_TEST_BASE_URL,
 			[
 				'json' => [
-					'modelyear'    => '2015',
+					'modelYear'    => '2015',
 					'manufacturer'     => 'Ford',
 					'model'    => 'Crown Victoria'
 				]
@@ -82,7 +82,7 @@ class RequirementTwoTest extends PHPUnit_Framework_TestCase
 			UNIT_TEST_BASE_URL,
 			[
 				'json' => [
-					'modelyear'    => 'undefined',
+					'modelYear'    => 'undefined',
 					'manufacturer'     => 'Audi',
 					'model'    => 'A3'
 				]
@@ -103,7 +103,7 @@ class RequirementTwoTest extends PHPUnit_Framework_TestCase
 			UNIT_TEST_BASE_URL,
 			[
 				'json' => [
-					'modelyear'    => '2015',
+					'modelYear'    => '2015',
 					'manufacturer'     => 'undefined',
 					'model'    => 'A3'
 				]
@@ -125,7 +125,7 @@ class RequirementTwoTest extends PHPUnit_Framework_TestCase
 			UNIT_TEST_BASE_URL,
 			[
 				'json' => [
-					'modelyear'    => '2015',
+					'modelYear'    => '2015',
 					'manufacturer'     => 'Audi',
 					'model'    => 'undefined'
 				]
@@ -146,7 +146,7 @@ class RequirementTwoTest extends PHPUnit_Framework_TestCase
 			UNIT_TEST_BASE_URL,
 			[
 				'json' => [
-					'modelyear'    => '2015',
+					'modelYear'    => '2015',
 					'manufacturer'     => 'Audi',
 					'model'    => ''
 				]
@@ -167,7 +167,7 @@ class RequirementTwoTest extends PHPUnit_Framework_TestCase
 			UNIT_TEST_BASE_URL,
 			[
 				'json' => [
-					'modelyear'    => '!@#$%^&*()+_',
+					'modelYear'    => '!@#$%^&*()+_',
 					'manufacturer'     => 'Audi',
 					'model'    => 'A3'
 				]
