@@ -1,7 +1,7 @@
 <?php
-
-require_once __DIR__ .'/../vendor/autoload.php';
 require_once __DIR__ .'/test-config.php';
+require_once __DIR__ .'/../vendor/autoload.php';
+
 
 class RequirementOneTest extends PHPUnit_Framework_TestCase
 {
