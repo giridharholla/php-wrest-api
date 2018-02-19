@@ -84,11 +84,11 @@
 				$client = new GuzzleHttp\Client();
 
 				//send request to NHTSA
-				$apiResponse = $client->get($uri);
+				$apiResponse = $client->request('GET',$uri);
 
 				try{
 					// get josn data from response
-					$json =  $apiResponse->json();
+					$json =  json_decode($apiResponse->getBody(),true);
 
 					//populate response data
 					if(!empty($json) && isset($json[API_RESPONSE_KEY_COUNT]))
@@ -168,11 +168,13 @@
 				$client = new GuzzleHttp\Client();
 
 				//send http request to get data from external api
-				$apiResponse = $client->get($uri);
+				//$apiResponse = $client->get($uri);//for guzzle4
+				$apiResponse = $client->request('GET',$uri);
 
 				try{
 					//extract json data from response
-					$json =  $apiResponse->json();
+					//$json =  $apiResponse->json(); //for guzzle4
+					$json =  json_decode($apiResponse->getBody(),true);
 
 					//populate response data
 					if(!empty($json) && isset($json[API_RESPONSE_KEY_COUNT]))
@@ -235,9 +237,11 @@
 							);
 						
 						//send request to get rating info
-						$apiResponse = $client->get($uri);
+						//$apiResponse = $client->get($uri);//guzzle4
+						$apiResponse = $client->request('GET',$uri);
 						$this->container->logger->info("Rating URI ".$uri);
-						$json =  $apiResponse->json();
+						//$json =  $apiResponse->json();//guzzle4
+						$json =  json_decode($apiResponse->getBody(),true);
 
 						//check if json data has results
 						if(!empty($json) && isset($json[API_RESPONSE_KEY_RESULTS]) && count($json[API_RESPONSE_KEY_RESULTS]) > 0 )
